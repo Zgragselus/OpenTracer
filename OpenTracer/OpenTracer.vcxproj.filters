@@ -16,8 +16,11 @@
     <Filter Include="Renderer">
       <UniqueIdentifier>{d8e8e0a0-cc44-480c-a060-93a7b44120ba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Buffer">
+    <Filter Include="Scene">
       <UniqueIdentifier>{d29ea87e-2bc9-4f6f-85fa-f6cbbac08f78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Aggregate">
+      <UniqueIdentifier>{5586fa36-c455-4f85-bb59-6b5d5fb915da}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -38,6 +41,15 @@
     <ClInclude Include="Renderer.h">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Naive.h">
+      <Filter>Aggregate</Filter>
+    </ClInclude>
+    <ClInclude Include="Mat4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Context.cpp">
@@ -56,10 +68,19 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Naive.cpp">
+      <Filter>Aggregate</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Texture.cl">
       <Filter>Surface</Filter>
+    </None>
+    <None Include="RendererNaive.cl">
+      <Filter>Renderer</Filter>
     </None>
   </ItemGroup>
 </Project>

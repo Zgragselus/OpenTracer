@@ -92,14 +92,18 @@
   <ItemGroup>
     <ClInclude Include="Context.h" />
     <ClInclude Include="Float4.h" />
+    <ClInclude Include="Mat4.h" />
+    <ClInclude Include="Naive.h" />
     <ClInclude Include="OpenTracerDll.h" />
     <ClInclude Include="OpenTracer.h" />
     <ClInclude Include="RayBuffer.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Context.cpp" />
+    <ClCompile Include="Naive.cpp" />
     <ClCompile Include="OpenTracer.cpp" />
     <ClCompile Include="RayBuffer.cpp" />
     <ClCompile Include="RayBuffer.cl">
@@ -107,9 +111,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="RendererNaive.cl" />
     <None Include="Texture.cl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </None>
