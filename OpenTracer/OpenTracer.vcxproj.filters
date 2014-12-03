@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Math">
+      <UniqueIdentifier>{548d301a-74b5-4c5a-bf01-11008fe1770e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Surface">
+      <UniqueIdentifier>{82cae1f5-ff44-43b9-a069-e5b305cb4a66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Context">
+      <UniqueIdentifier>{b2e01639-8ad5-4f86-9e6d-3a6d5beddb88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ray">
+      <UniqueIdentifier>{49053e3c-7f8c-4b18-93b6-49a97ea44eeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Renderer">
+      <UniqueIdentifier>{d8e8e0a0-cc44-480c-a060-93a7b44120ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buffer">
+      <UniqueIdentifier>{d29ea87e-2bc9-4f6f-85fa-f6cbbac08f78}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Float4.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Context.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="OpenTracer.h" />
+    <ClInclude Include="OpenTracerDll.h" />
+    <ClInclude Include="Texture.h">
+      <Filter>Surface</Filter>
+    </ClInclude>
+    <ClInclude Include="RayBuffer.h">
+      <Filter>Ray</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Context.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="OpenTracer.cpp" />
+    <ClCompile Include="Texture.cpp">
+      <Filter>Surface</Filter>
+    </ClCompile>
+    <ClCompile Include="RayBuffer.cpp">
+      <Filter>Ray</Filter>
+    </ClCompile>
+    <ClCompile Include="RayBuffer.cl">
+      <Filter>Ray</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Renderer</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Texture.cl">
+      <Filter>Surface</Filter>
+    </None>
+  </ItemGroup>
+</Project>
