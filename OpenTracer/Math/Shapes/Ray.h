@@ -22,6 +22,26 @@ namespace OpenTracerCore
 			this->mInverse = rcp(this->mDirection);
 		}
 
+		void* operator new(size_t size)
+		{
+			return _aligned_malloc(size, 16);
+		}
+
+		void* operator new[](size_t size)
+		{
+			return _aligned_malloc(size, 16);
+		}
+
+		void operator delete(void* ptr)
+		{
+			_aligned_free(ptr);
+		}
+
+		void operator delete[](void* ptr)
+		{
+			_aligned_free(ptr);
+		}
+
 		friend class Intersection;
 	};
 }

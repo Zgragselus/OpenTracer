@@ -37,6 +37,9 @@
     <Filter Include="Graph\Trees">
       <UniqueIdentifier>{0153c2dd-73b4-4b7e-b801-de546244abbd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Util">
+      <UniqueIdentifier>{907ef014-8428-4454-8394-4ccab978b53e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Context.h">
@@ -55,9 +58,6 @@
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Naive.h">
-      <Filter>Aggregate</Filter>
     </ClInclude>
     <ClInclude Include="Math\Intersection\Intersection.h">
       <Filter>Math\Intersection</Filter>
@@ -83,6 +83,15 @@
     <ClInclude Include="Graph\Trees\KDTree.h">
       <Filter>Graph\Trees</Filter>
     </ClInclude>
+    <ClInclude Include="Aggregate\Aggregate.h">
+      <Filter>Aggregate</Filter>
+    </ClInclude>
+    <ClInclude Include="Aggregate\Spatial.h">
+      <Filter>Aggregate</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Config.h">
+      <Filter>Ray</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Context.cpp">
@@ -104,15 +113,18 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Naive.cpp">
-      <Filter>Aggregate</Filter>
+    <ClCompile Include="Util\Config.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph\Trees\KDTree.cpp">
+      <Filter>Graph\Trees</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Texture.cl">
       <Filter>Surface</Filter>
     </None>
-    <None Include="RendererNaive.cl">
+    <None Include="Renderer.cl">
       <Filter>Renderer</Filter>
     </None>
   </ItemGroup>

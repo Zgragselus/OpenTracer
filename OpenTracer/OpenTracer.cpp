@@ -5,7 +5,7 @@
 #include "RayBuffer.h"
 #include "Math/Numeric/Float4.h"
 #include "Scene.h"
-#include "Naive.h"
+#include "Aggregate/Aggregate.h"
 #include "Renderer.h"
 
 using namespace OpenTracer;
@@ -88,13 +88,17 @@ Scene::~Scene()
 	delete ((OpenTracerCore::Scene*)mData);
 }
 
-Aggregate::Aggregate(Aggregate::Type type, Scene* scene)
+Aggregate::Aggregate(Aggregate::Type type, Scene* scene, const char* config)
 {
 	mType = type;
 	switch (mType)
 	{
 	case Aggregate::AGGREGATE_NAIVE:
-		mData = (void*)(new OpenTracerCore::Naive(g_mContext, (OpenTracerCore::Scene*)scene->mData));
+		mData = (void*)(new OpenTracerCore::Aggregate(g_mContext, (OpenTracerCore::Scene*)scene->mData));
+		break;
+
+	case Aggregate::AGGREGATE_KDTREE:
+		mData = (void*)(new OpenTracerCore::Spatial(g_mContext, (OpenTracerCore::Scene*)scene->mData, std::string(config)));
 		break;
 
 	default:
@@ -107,7 +111,11 @@ Aggregate::~Aggregate()
 	switch (mType)
 	{
 	case Aggregate::AGGREGATE_NAIVE:
-		delete ((OpenTracerCore::Naive*)mData);
+		delete ((OpenTracerCore::Aggregate*)mData);
+		break;
+
+	case Aggregate::AGGREGATE_KDTREE:
+		delete ((OpenTracerCore::Spatial*)mData);
 		break;
 
 	default:
@@ -129,5 +137,17 @@ Renderer::~Renderer()
 void Renderer::Render(Scene* scene, Aggregate* aggregate, RayGenerator* raygen, Texture* output)
 {
 	OpenTracerCore::Renderer* r = (OpenTracerCore::Renderer*)mData;
-	r->Render((OpenTracerCore::Scene*)scene->mData, (OpenTracerCore::Naive*)aggregate->mData, (OpenTracerCore::RayBuffer*)raygen->mData, (OpenTracerCore::Texture*)output->mData);
+	switch (aggregate->mType)
+	{
+	case Aggregate::AGGREGATE_NAIVE:
+		r->Render((OpenTracerCore::Scene*)scene->mData, (OpenTracerCore::Aggregate*)aggregate->mData, (OpenTracerCore::RayBuffer*)raygen->mData, (OpenTracerCore::Texture*)output->mData);
+		break;
+
+	case Aggregate::AGGREGATE_KDTREE:
+		r->Render((OpenTracerCore::Scene*)scene->mData, (OpenTracerCore::Spatial*)aggregate->mData, (OpenTracerCore::RayBuffer*)raygen->mData, (OpenTracerCore::Texture*)output->mData);
+		break;
+
+	default:
+		break;
+	}
 }

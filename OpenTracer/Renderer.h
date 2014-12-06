@@ -3,7 +3,8 @@
 
 #include "Texture.h"
 #include "RayBuffer.h"
-#include "Naive.h"
+#include "Aggregate/Aggregate.h"
+#include "Aggregate/Spatial.h"
 
 namespace OpenTracerCore
 {
@@ -11,13 +12,15 @@ namespace OpenTracerCore
 	{
 	private:
 		static cl::Program* mProgram;
-		static cl::Kernel* mKernel;
+		static cl::Kernel* mKernelNaive;
+		static cl::Kernel* mKernelSpatial;
 		Context* mContext;
 
 	public:
 		Renderer(Context* context);
 		~Renderer();
-		void Render(Scene* scene, Naive* naive, RayBuffer* rayBuffer, Texture* output);
+		void Render(Scene* scene, Aggregate* naive, RayBuffer* rayBuffer, Texture* output);
+		void Render(Scene* scene, Spatial* naive, RayBuffer* rayBuffer, Texture* output);
 	};
 }
 

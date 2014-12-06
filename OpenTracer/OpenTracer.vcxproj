@@ -55,7 +55,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;OPENTRACER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;OPENTRACER_EXPORTS;NOMINMAX;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
     </ClCompile>
@@ -73,7 +73,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;OPENTRACER_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;OPENTRACER_EXPORTS;NOMINMAX;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <StructMemberAlignment>16Bytes</StructMemberAlignment>
     </ClCompile>
@@ -90,6 +90,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Aggregate\Aggregate.h" />
+    <ClInclude Include="Aggregate\Spatial.h" />
     <ClInclude Include="Context.h" />
     <ClInclude Include="Graph\Trees\BVH.h" />
     <ClInclude Include="Graph\Trees\KDTree.h" />
@@ -99,17 +101,17 @@
     <ClInclude Include="Math\Shapes\AABB.h" />
     <ClInclude Include="Math\Shapes\Ray.h" />
     <ClInclude Include="Math\Shapes\Triangle.h" />
-    <ClInclude Include="Naive.h" />
     <ClInclude Include="OpenTracerDll.h" />
     <ClInclude Include="OpenTracer.h" />
     <ClInclude Include="RayBuffer.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Util\Config.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Context.cpp" />
-    <ClCompile Include="Naive.cpp" />
+    <ClCompile Include="Graph\Trees\KDTree.cpp" />
     <ClCompile Include="OpenTracer.cpp" />
     <ClCompile Include="RayBuffer.cpp" />
     <ClCompile Include="RayBuffer.cl">
@@ -119,9 +121,10 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Util\Config.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="RendererNaive.cl" />
+    <None Include="Renderer.cl" />
     <None Include="Texture.cl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </None>

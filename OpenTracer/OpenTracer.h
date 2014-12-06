@@ -80,15 +80,16 @@ namespace OpenTracer
 	public:
 		enum Type
 		{
-			AGGREGATE_NAIVE
+			AGGREGATE_NAIVE,
+			AGGREGATE_KDTREE
 		};
+		Type mType;
 
 	private:
 		void* mData;
-		Type mType;
 
 	public:
-		OPENTRACER_API Aggregate(Type type, Scene* scene);
+		OPENTRACER_API Aggregate(Type type, Scene* scene, const char* config = "");
 		OPENTRACER_API ~Aggregate();
 
 		friend class Renderer;
