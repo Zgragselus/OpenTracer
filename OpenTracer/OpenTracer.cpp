@@ -3,7 +3,10 @@
 #include "Context.h"
 #include "Texture.h"
 #include "RayBuffer.h"
-#include "Float4.h"
+#include "Math/Numeric/Float4.h"
+#include "Scene.h"
+#include "Naive.h"
+#include "Renderer.h"
 
 using namespace OpenTracer;
 
@@ -74,7 +77,57 @@ void RayGenerator::GeneratePrimary(float posX, float posY, float posZ, float tar
 	((OpenTracerCore::RayBuffer*)mData)->GeneratePrimary();
 }
 
-void Renderer::Render(Texture* output, RayGenerator* raygen)
+Scene::Scene(float* vertices, int count)
 {
-	((OpenTracerCore::Texture*)output->mData)->SetData(((OpenTracerCore::RayBuffer*)raygen->mData)->GetRayBuffer());
+	OpenTracerCore::Scene* scene = new OpenTracerCore::Scene(g_mContext, vertices, count);
+	mData = (void*)scene;
+}
+
+Scene::~Scene()
+{
+	delete ((OpenTracerCore::Scene*)mData);
+}
+
+Aggregate::Aggregate(Aggregate::Type type, Scene* scene)
+{
+	mType = type;
+	switch (mType)
+	{
+	case Aggregate::AGGREGATE_NAIVE:
+		mData = (void*)(new OpenTracerCore::Naive(g_mContext, (OpenTracerCore::Scene*)scene->mData));
+		break;
+
+	default:
+		break;
+	}
+}
+
+Aggregate::~Aggregate()
+{
+	switch (mType)
+	{
+	case Aggregate::AGGREGATE_NAIVE:
+		delete ((OpenTracerCore::Naive*)mData);
+		break;
+
+	default:
+		break;
+	}
+}
+
+Renderer::Renderer()
+{
+	OpenTracerCore::Renderer* r = new OpenTracerCore::Renderer(g_mContext);
+	mData = (void*)r;
+}
+
+Renderer::~Renderer()
+{
+	delete ((OpenTracerCore::Renderer*)mData);
+}
+
+void Renderer::Render(Scene* scene, Aggregate* aggregate, RayGenerator* raygen, Texture* output)
+{
+	OpenTracerCore::Renderer* r = (OpenTracerCore::Renderer*)mData;
+	r->Render((OpenTracerCore::Scene*)scene->mData, (OpenTracerCore::Naive*)aggregate->mData, (OpenTracerCore::RayBuffer*)raygen->mData, (OpenTracerCore::Texture*)output->mData);
 }

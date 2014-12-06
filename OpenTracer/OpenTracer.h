@@ -60,9 +60,48 @@ namespace OpenTracer
 		friend class Renderer;
 	};
 
-	class Renderer
+	class Aggregate;
+
+	class Scene
+	{
+	private:
+		void* mData;
+
+	public:
+		OPENTRACER_API Scene(float* vertices, int count);
+		OPENTRACER_API ~Scene();
+
+		friend class Renderer;
+		friend class Aggregate;
+	};
+
+	class Aggregate
 	{
 	public:
-		OPENTRACER_API static void Render(Texture* output, RayGenerator* raygen);
+		enum Type
+		{
+			AGGREGATE_NAIVE
+		};
+
+	private:
+		void* mData;
+		Type mType;
+
+	public:
+		OPENTRACER_API Aggregate(Type type, Scene* scene);
+		OPENTRACER_API ~Aggregate();
+
+		friend class Renderer;
+	};
+
+	class Renderer
+	{
+	private:
+		void* mData;
+
+	public:
+		OPENTRACER_API Renderer();
+		OPENTRACER_API ~Renderer();
+		OPENTRACER_API void Render(Scene* scene, Aggregate* aggregate, RayGenerator* raygen, Texture* output);
 	};
 }

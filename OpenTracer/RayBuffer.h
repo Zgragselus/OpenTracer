@@ -2,7 +2,7 @@
 #define __RAY_BUFFER__H__
 
 #include "Context.h"
-#include "Float4.h"
+#include "Math/Numeric/Float4.h"
 
 namespace OpenTracerCore
 {

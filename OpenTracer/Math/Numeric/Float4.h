@@ -448,6 +448,12 @@ namespace OpenTracerCore
 		///////////////////////////////////////////////////////////////////////////////////////////////////
 		/** Additional arithmetics                                                                      **/
 
+		/* Reciprocal */
+		inline friend float4 rcp(const float4& a)
+		{
+			return _mm_rcp_ps(a.xmm);
+		}
+
 		/* Horizontal add */
 		inline friend float4 hadd(const float4& a)
 		{

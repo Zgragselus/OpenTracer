@@ -1,7 +1,7 @@
 #ifndef __TEXTURE_H__
 #define __TEXTURE_H__
 
-#include "Float4.h"
+#include "Math/Numeric/Float4.h"
 #include "Context.h"
 #include "OpenTracerDll.h"
 
