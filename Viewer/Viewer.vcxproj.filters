@@ -6,5 +6,9 @@
   <ItemGroup>
     <ClInclude Include="Main.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="Sponza.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\KDTree.conf" />
   </ItemGroup>
 </Project>

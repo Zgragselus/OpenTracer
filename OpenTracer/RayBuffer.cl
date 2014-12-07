@@ -18,8 +18,8 @@ __kernel void Primary(	__global float4* rayBuffer,
 		return;
 	}
 
-	float x = ((float)i - halfDim.x) * invHalfDim.x;
-	float y = ((float)j - halfDim.y) * aspect * invHalfDim.y;
+	float x = ((float)i - halfDim.x);
+	float y = ((float)j - halfDim.y) * aspect;
 
 	float4 dir = normalize(forward + x * right + y * up);
 

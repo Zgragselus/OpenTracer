@@ -156,7 +156,7 @@ void KDTree::RecursiveBuild(unsigned int node,
 
 	int best_axis = -1;
 	int best_offset = -1;
-	float best_cost = 1e30f;
+	float best_cost = std::numeric_limits<float>::infinity();
 	float old_cost = (float)(this->mSahIsectCost * current_count);
 	float4 d = node_bounds->mMax - node_bounds->mMin;
 	float total_sa = (2.0f * (d.x * d.y + d.x * d.z + d.y * d.z));

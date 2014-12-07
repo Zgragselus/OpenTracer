@@ -92,12 +92,12 @@ __kernel void TraceSpatial(__global float4* triangles,
 	{
 		return;
 	}
-
+	
 	float4 o = rays[i * 2 + 0];
 	float4 d = rays[i * 2 + 1];
 	float4 inv = native_recip(d);
 
-	__local struct KDStackNode stack[SPATIAL_STACK_SIZE];
+	struct KDStackNode stack[SPATIAL_STACK_SIZE];
 	unsigned int stack_ptr = 0;
 
 	{
@@ -128,10 +128,14 @@ __kernel void TraceSpatial(__global float4* triangles,
 		node = stack[stack_ptr].node;
 		float near = stack[stack_ptr].near;
 		float far = stack[stack_ptr].far;
+		
+		uint axis = (nodes[node].flags & 3);
+		uint above_child = (nodes[node].above_child >> 2);
+		float split = nodes[node].split;
+		unsigned int prim_offset = nodes[node].prim_offset;
 
-		while ((nodes[node].flags & 3) != 3)
+		while (axis != 3)
 		{
-			int axis = (nodes[node].flags & 3);
 			float hitpos;
 			int below_first;
 			unsigned int first, second;
@@ -139,29 +143,29 @@ __kernel void TraceSpatial(__global float4* triangles,
 			switch (axis)
 			{
 			case 0:
-				hitpos = (nodes[node].split - o.x) * inv.x;
-				below_first = (o.x < nodes[node].split) || (o.x == nodes[node].split && d.x >= 0.0f);
+				hitpos = (split - o.x) * inv.x;
+				below_first = (o.x < split) || (o.x == split && d.x >= 0.0f);
 				break;
 
 			case 1:
-				hitpos = (nodes[node].split - o.y) * inv.y;
-				below_first = (o.y < nodes[node].split) || (o.y == nodes[node].split && d.y >= 0.0f);
+				hitpos = (split - o.y) * inv.y;
+				below_first = (o.y < split) || (o.y == split && d.y >= 0.0f);
 				break;
 
 			case 2:
-				hitpos = (nodes[node].split - o.z) * inv.z;
-				below_first = (o.z < nodes[node].split) || (o.z == nodes[node].split && d.z >= 0.0f);
+				hitpos = (split - o.z) * inv.z;
+				below_first = (o.z < split) || (o.z == split && d.z >= 0.0f);
 				break;
 			}
 
 			if (below_first)
 			{
 				first = node + 1;
-				second = nodes[node].above_child >> 2;
+				second = above_child;
 			}
 			else
 			{
-				first = nodes[node].above_child >> 2;
+				first = above_child;
 				second = node + 1;
 			}
 			
@@ -183,13 +187,18 @@ __kernel void TraceSpatial(__global float4* triangles,
 				node = first;
 				far = hitpos;
 			}
+
+			axis = (nodes[node].flags & 3);
+			above_child = (nodes[node].above_child >> 2);
+			split = nodes[node].split;
+			prim_offset = nodes[node].prim_offset;
 		}
 
-		unsigned int prims_num = (nodes[node].prim_count >> 2);
+		unsigned int prims_num = above_child;
 
 		if (prims_num > 0)
 		{
-			__global unsigned int *prims_ids = &indices[nodes[node].prim_offset];
+			__global unsigned int *prims_ids = &indices[prim_offset];
 
 			for (unsigned int i = 0; i < prims_num; i++)
 			{
