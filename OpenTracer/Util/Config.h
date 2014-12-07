@@ -23,6 +23,7 @@
 #include <vector>
 #include <map>
 #include <fstream>
+#include <iostream>
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 #include "../Math/Numeric/Float4.h"

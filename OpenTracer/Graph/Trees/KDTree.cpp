@@ -12,7 +12,13 @@ KDTree::KDTree(const std::string& config, Scene* scene)
 	mSahEmptyBonus = cfg->Get<float>("KDTree.SAH.EmptyBonus");
 	delete cfg;
 
+	std::cout << "Building KD-Tree using SAH algorithm..." << std::endl;
+
 	BuildTree(scene->GetGeometryCPU(), scene->GetTriangleCount());
+
+	std::cout << "Statistics:" << std::endl;
+	std::cout << "\tTotal number of primitives: " << this->mIndices_next << std::endl;
+	std::cout << "\tTotal number of nodes: " << this->mNodes_next << std::endl;
 }
 
 KDTree::~KDTree()

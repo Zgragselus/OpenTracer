@@ -4,6 +4,7 @@
 #include <string>
 #include <utility>
 #include <iostream>
+#include <chrono>
 
 using namespace OpenTracerCore;
 
@@ -21,7 +22,7 @@ Renderer::Renderer(Context* context)
 		std::string s(std::istreambuf_iterator<char>(sf), (std::istreambuf_iterator<char>()));
 		cl::Program::Sources source = cl::Program::Sources(1, std::make_pair(s.c_str(), s.length() + 1));
 		mProgram = new cl::Program(mContext->GetContext(), source);
-		mProgram->build(mContext->GetDevices());
+		mProgram->build(mContext->GetDevices(), "-cl-mad-enable -cl-unsafe-math-optimizations -cl-finite-math-only -cl-fast-relaxed-math");
 		std::cout << mProgram->getBuildInfo<CL_PROGRAM_BUILD_LOG>(mContext->GetDevices()[0]) << std::endl;
 		mKernelNaive = new cl::Kernel(*mProgram, "TraceNaive");
 		mKernelSpatial = new cl::Kernel(*mProgram, "TraceSpatial");
@@ -65,5 +66,7 @@ void Renderer::Render(Scene* scene, Spatial* spatial, RayBuffer* rayBuffer, Text
 	mKernelSpatial->setArg(7, trisCount);
 	mKernelSpatial->setArg(8, raysCount);
 
-	mContext->GetCommandQueue().enqueueNDRangeKernel(*mKernelSpatial, cl::NullRange, cl::NDRange(raysCount));
+	cl::Event evt;
+	mContext->GetCommandQueue().enqueueNDRangeKernel(*mKernelSpatial, cl::NullRange, cl::NDRange(raysCount), cl::NullRange, 0, &evt);
+	evt.wait();
 }

@@ -97,7 +97,7 @@ __kernel void TraceSpatial(__global float4* triangles,
 	float4 d = rays[i * 2 + 1];
 	float4 inv = native_recip(d);
 
-	struct KDStackNode stack[SPATIAL_STACK_SIZE];
+	__local struct KDStackNode stack[SPATIAL_STACK_SIZE];
 	unsigned int stack_ptr = 0;
 
 	{
