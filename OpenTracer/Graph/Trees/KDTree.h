@@ -9,7 +9,7 @@
 
 namespace OpenTracerCore
 {
-	class KDTree
+	class __declspec(align(16)) KDTree
 	{
 	private:
 		class BoundEdge
