@@ -39,7 +39,7 @@ void RayBuffer::SetCamera(const float4& position, const float4& target, const fl
 		{
 			delete mDeviceData;
 		}
-		mDeviceData = new cl::Buffer(mContext->GetContext(), CL_MEM_READ_WRITE, width * height * sizeof(float4) * 2);
+		mDeviceData = new cl::Buffer(mContext->GetContext(), CL_MEM_READ_WRITE, width * height * sizeof(float4) * 4);
 	}
 
 	mOrigin = position;
@@ -65,6 +65,49 @@ void RayBuffer::GeneratePrimary()
 	float planePos = (float)halfDim.s[1] / tanf(mFov * 0.5f * 3.141592654f / 180.0f);
 	cl_float4 forward = { mForward.x * planePos, mForward.y * planePos, mForward.z * planePos, 0.0f };
 	cl_float4 origin = { mOrigin.x, mOrigin.y, mOrigin.z, mOrigin.w };
+	cl_float4 differentials[2];
+
+	{
+		cl_float4 diff;
+		diff.s[0] = forward.s[0];
+		diff.s[1] = forward.s[1];
+		diff.s[2] = forward.s[2];
+		diff.s[3] = 0.0f;
+		float diffl = 1.0f / sqrtf(diff.s[0] * diff.s[0] + diff.s[1] * diff.s[1] + diff.s[2] * diff.s[2]);
+		diff.s[0] *= diffl;
+		diff.s[1] *= diffl;
+		diff.s[2] *= diffl;
+
+		cl_float4 diffx;
+		diffx.s[0] = forward.s[0] + right.s[0];
+		diffx.s[1] = forward.s[1] + right.s[1];
+		diffx.s[2] = forward.s[2] + right.s[2];
+		diffx.s[3] = 0.0f;
+		float diffxl = 1.0f / sqrtf(diffx.s[0] * diffx.s[0] + diffx.s[1] * diffx.s[1] + diffx.s[2] * diffx.s[2]);
+		diffx.s[0] *= diffxl;
+		diffx.s[1] *= diffxl;
+		diffx.s[2] *= diffxl;
+
+		cl_float4 diffy;
+		diffy.s[0] = forward.s[0] + up.s[0];
+		diffy.s[1] = forward.s[1] + up.s[1];
+		diffy.s[2] = forward.s[2] + up.s[2];
+		diffy.s[3] = 0.0f;
+		float diffyl = 1.0f / sqrtf(diffy.s[0] * diffy.s[0] + diffy.s[1] * diffy.s[1] + diffy.s[2] * diffy.s[2]);
+		diffy.s[0] *= diffyl;
+		diffy.s[1] *= diffyl;
+		diffy.s[2] *= diffyl;
+
+		differentials[0].s[0] = diffx.s[0] - diff.s[0];
+		differentials[0].s[1] = diffx.s[1] - diff.s[1];
+		differentials[0].s[2] = diffx.s[2] - diff.s[2];
+		differentials[0].s[3] = diffx.s[3] - diff.s[3];
+
+		differentials[1].s[0] = diffy.s[0] - diff.s[0];
+		differentials[1].s[1] = diffy.s[1] - diff.s[1];
+		differentials[1].s[2] = diffy.s[2] - diff.s[2];
+		differentials[1].s[3] = diffy.s[3] - diff.s[3];
+	}
 
 	mKernel->setArg(0, *mDeviceData);
 	mKernel->setArg(1, origin);
@@ -77,6 +120,8 @@ void RayBuffer::GeneratePrimary()
 	mKernel->setArg(8, mFar);
 	mKernel->setArg(9, mAspect);
 	mKernel->setArg(10, dim);
+	mKernel->setArg(11, differentials[0]);
+	mKernel->setArg(12, differentials[1]);
 	
 	mContext->GetCommandQueue().enqueueNDRangeKernel(*mKernel, cl::NullRange, cl::NDRange(dim.s[0], dim.s[1]));
 }

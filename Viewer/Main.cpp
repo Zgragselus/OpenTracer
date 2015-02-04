@@ -27,7 +27,7 @@ int main()
 	glUnmapBuffer = (PFNGLUNMAPBUFFERPROC)wglGetProcAddress("glUnmapBuffer");
 
 	OpenTracer::Context::GetInstance().Initialize(OpenTracer::Context::CONTEXT_TYPE_GPU);
-	OpenTracer::Texture* image = new OpenTracer::Texture(800, 600);
+	OpenTracer::Texture* image = new OpenTracer::Texture(640, 480);
 	OpenTracer::RayGenerator* raygen = new OpenTracer::RayGenerator();
 	OpenTracer::Scene* scene = new OpenTracer::Scene(model, sizeof(model) / sizeof(float) / 4);
 	OpenTracer::Aggregate* as = new OpenTracer::Aggregate(OpenTracer::Aggregate::AGGREGATE_KDTREE, scene, "C:\\Programming\\OpenTracer\\KDTree.conf");
@@ -81,7 +81,7 @@ int main()
 		auto start = std::chrono::high_resolution_clock::now();
 		raygen->GeneratePrimary(0.0f, 1.0f, 0.0f, 2.0f * sinf(time), 1.5f, 2.0f * cosf(time), 0.0f, 1.0f, 0.0f, (float)image->GetHeight() / (float)image->GetWidth(), 45.0f, image->GetWidth(), image->GetHeight(), 0.1f, 10000.0f);
 		renderer->Render(scene, as, raygen, image);
-		
+
 		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo);
 		float *ptr = (float*)glMapBuffer(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY);
 		memcpy(ptr, image->GetData(), sizeof(float) * 4 * image->GetWidth() * image->GetHeight());
@@ -104,7 +104,12 @@ int main()
 		glEnd();
 		std::chrono::microseconds us = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - start);
 		long long int us_i = us.count();
-		std::cout << "FPS: " << 1000000 / us_i << " Time: " << us_i / 1000 << "ms" << std::endl;
+		if (us_i > 0)
+		{
+			std::cout << "FPS: " << 1000000 / us_i <<
+				" Time: " << us_i / 1000 << "ms " <<
+				"Rays: " << image->GetWidth() * image->GetHeight() * 1.0 / (double)us_i << "Mrays/s" << std::endl;
+		}
 
 		window.display();
 
